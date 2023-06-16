@@ -1,0 +1,237 @@
+﻿@model Login_WithRepository.Models.Models.OrderModel
+
+@{
+    ViewBag.Title = "AddOrder";
+}
+
+<h2>AddOrder</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(Model => Model.UserId)
+    @Html.HiddenFor(Model => Model.OrderDate)
+    @Html.HiddenFor(Model => Model.OrdertotalQuantity)
+    @Html.HiddenFor(Model => Model.TotalAmount)
+    @Html.HiddenFor(Model => Model.AfterGST)
+    @Html.HiddenFor(Model => Model.TotalPayable)
+
+
+<div class="form-horizontal">
+
+
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ItemId, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.ItemId, new SelectList(Model.itemList, "ItemId", "ItemName"), "Select Item", new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.ItemId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.OrderItemQuantity, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.OrderItemQuantity, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+            @Html.ValidationMessageFor(model => model.OrderItemQuantity, "", new { @class = "text-danger" })
+            <span class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="button" value="Submit" class="btn btn-primary" id="addItemBtn" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.CouponCode, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.CouponCode, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.CouponCode, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div>
+        <button type="button" class="btn btn-info" id="couponBtn">Apply Coupon</button>
+        <p id="couponP"></p>
+    </div>
+    <div class="form-group row ">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="button" value="Place Order" id="placeOrderBtn" class="btn btn-primary" />
+        </div>
+    </div>
+
+</div>
+}
+
+<div class="table-responsive">
+    <table class="table table-bordered" id="OrderTable">
+        <thead>
+            <tr>
+                <th>Item Name</th>
+                <th>Qty</th>
+                <th>Amount</th>
+                <th>Totol</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="TableBody">
+        </tbody>
+        <tfoot>
+            <tr>
+                <td> Total Item <span id="Totalitem"></span></td>
+                <td> Total <span id="TotalPayAmountSpan"></span></td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+    <div class="">
+        <p>SGST : 5% <span id="sgstSpan"></span></p>
+        <p>CGST : 5% <span id="cgstSpan"></span></p>
+        <p>Total payable amount <span id="totalPayAmount"></span></p>
+
+        <p>Net payable amount <span id="netPayAmount"></span></p>
+    </div>
+</div>
+
+
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#addItemBtn").click(function () {
+            alert("hello");
+            $.ajax({
+                type: "get",
+                url: "/GetData/GetItemPrice?id=" + $("#ItemId").val(),
+                seccess: function (res) {
+                    if ($("#OrderItemQuantity").val() <= 0) {
+                        $("#OrderItemQuantity").next().html("Please enter Quantity");
+                    }
+                    else {
+                        $("#OrderItemQuantity").next().html("");
+                        let quantity = $("#OrderItemQuantity").val();
+                        let total = quantity * res.ItemPrice;
+                        let row = `<tr>
+                             <td>${res.ItemName}</td>
+                             <td>${quantity}</td>
+                             <td>${res.ItemPrice}</td>
+                             <td>${total}</td>
+                             <td><button onclick="EditItem(this)" type="button" class="btn btn-info">Edit</button>
+                             <button onclick="DeleteItem(this)" type="button" class="btn btn-danger">Delete</button>
+                             </td>
+                        </tr>`
+                        $("#TableBody").append(row);
+                        $("#OrderItemQuantity").val("0");
+                        $("#ItemId").val("");
+                        ShowTotalItem()
+                    }
+                }
+            })
+        })
+
+        $("#couponBtn").click(function () {
+            $.ajax({
+                type: "GET",
+                url: "/GetData/GetCouponDiscount?couponCode=" + $("#CouponCode").val(),
+                success: function (res) {
+                    if (res != "" && res.CouponUsageLimit >= 1) {
+                        console.log(res);
+                        if (res.couponType == 1) {
+                            let finalAmount = Number($("#totalPayAmount").html()) - res.CoupFlatAmount;
+                            finalAmount = Math.floor(finalAmount);
+                            $("#netPayAmount").html(finalAmount);
+                        }
+                        else if (res.CouponType == 0) {
+                            let TotalPay = Number($("#totalPayAmount").html());
+                            let finalAmount = TotalPay - (TotalPay * res.CouponPercentage * 0.01);
+                            finalAmount = Math.floor(finalAmount);
+                            $("#netPayAmount").html(finalAmount);
+                        }
+                        $("#couponP").html("Coupon applied successfully");
+                    }
+                    else {
+                        $("#couponP").html("Invalid Coupon");
+                    }
+                }
+            })
+        });
+
+        $("form").on("submit", () => {
+
+            let totalAmount = Number($("#totalPayAmountSpan").html());
+            $("#orderAmount").val(totalAmount);
+            let afterGst = Number($("#sgstSpan").html());
+            $("#afterGst").val(afterGst);
+            let netAmount = Number($("#netPayAmount").html());
+            $("#totalPayable").val(netAmount);
+            let totalQuantity = Number($("#totalItemSpan").html());
+            $("#orderTotalQty").val(totalQuantity);
+        })
+
+        $("#placeOrderBtn").click(function () {
+            if ($("#totalPayAmountSpan").html() == "") {
+                $("#errorH").html("OrderAmount can't be null");
+            }
+            else if ($("#totalItemSpan").html() == "") {
+                $("#errorH").html("OrderItems can't be null");
+            }
+            else {
+                $("form").trigger("submit");
+            }
+        })
+    })
+    function ShowTotalItem() {
+        let totalItem = 0;
+        let totalAmount = 0;
+        $("#OrderTable tbody tr").each(function () {
+            totalItem += Number($(this).find("td:eq(1)").html())
+            totalAmount += Number($(this).find("td:eq(3)").html())
+        })
+        $("#Totalitem").html(totalItem);
+        let gst = totalAmount + totalAmount * 0.05;
+        $("#sgstSpan").html(gst);
+        $("#cgstSpan").html(gst);
+        $("#TotalPayAmount").html(gst + gst);
+        $("#sgstSpan").html();
+        $("#TotalPayAmountSpan").html(totalAmount);
+        $("#netPayAmount").html(gst + gst);
+    }
+
+    function EditItem(currrentItem) {
+        let currentRow = $(currrentItem).closest("tr");
+        console.log(currentRow.find("input").length)
+        if (currentRow.find("input").length <= 0) {
+            let currentQty = currentRow.find("td:eq(1)").html();
+            let row = `<input type="number" class="form-control" id="ItemQty" value="${currentQty}">`;
+            currentRow.find("td:eq(1)").empty().append(row);
+            currentRow.find("button:eq(0)").html("Save");
+        }
+        else {
+            let currentQty = currentRow.find("input:eq(0)");
+            if (currentQty.val() <= 0) {
+                $("#orderItemQty").next().html("Please enter quantity");
+            }
+            else {
+                $("#orderItemQty").next().html("");
+                let row = `${currentQty.val()}`;
+                currentRow.find("td:eq(1)").empty().append(row);
+                let total = currentRow.find("td:eq(2)").html() * currentQty.val();
+                currentRow.find("td:eq(3)").html(total);
+                currentRow.find("button:eq(0)").html("Edit");
+                showTotalItems();
+            }
+        }
+    }
+
+    function DeleteItem(currentItem) {
+        let ans = confirm("Are you sure to delete ?");
+        if (ans) {
+            $(currentItem).closest("tr").remove();
+            showTotalItems();
+        }
+    }
+
+</script>
+
+
+

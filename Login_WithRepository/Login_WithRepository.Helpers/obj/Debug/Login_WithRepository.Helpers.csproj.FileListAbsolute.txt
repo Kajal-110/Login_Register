@@ -1,0 +1,12 @@
+C:\Users\SIT349\Documents\Kajal\[AfterExam ].Net\Extra_Practice\Login_WithRepository\Login_WithRepository.Helpers\bin\Debug\Login_WithRepository.Helpers.dll
+C:\Users\SIT349\Documents\Kajal\[AfterExam ].Net\Extra_Practice\Login_WithRepository\Login_WithRepository.Helpers\bin\Debug\Login_WithRepository.Helpers.pdb
+C:\Users\SIT349\Documents\Kajal\[AfterExam ].Net\Extra_Practice\Login_WithRepository\Login_WithRepository.Helpers\bin\Debug\Login_WithRepository.Models.dll
+C:\Users\SIT349\Documents\Kajal\[AfterExam ].Net\Extra_Practice\Login_WithRepository\Login_WithRepository.Helpers\bin\Debug\EntityFramework.dll
+C:\Users\SIT349\Documents\Kajal\[AfterExam ].Net\Extra_Practice\Login_WithRepository\Login_WithRepository.Helpers\bin\Debug\Login_WithRepository.Models.pdb
+C:\Users\SIT349\Documents\Kajal\[AfterExam ].Net\Extra_Practice\Login_WithRepository\Login_WithRepository.Helpers\bin\Debug\Login_WithRepository.Models.dll.config
+C:\Users\SIT349\Documents\Kajal\[AfterExam ].Net\Extra_Practice\Login_WithRepository\Login_WithRepository.Helpers\bin\Debug\EntityFramework.xml
+C:\Users\SIT349\Documents\Kajal\[AfterExam ].Net\Extra_Practice\Login_WithRepository\Login_WithRepository.Helpers\obj\Debug\Login_WithRepository.Helpers.csproj.AssemblyReference.cache
+C:\Users\SIT349\Documents\Kajal\[AfterExam ].Net\Extra_Practice\Login_WithRepository\Login_WithRepository.Helpers\obj\Debug\Login_WithRepository.Helpers.csproj.CoreCompileInputs.cache
+C:\Users\SIT349\Documents\Kajal\[AfterExam ].Net\Extra_Practice\Login_WithRepository\Login_WithRepository.Helpers\obj\Debug\Login_WithRepository.Helpers.csproj.CopyComplete
+C:\Users\SIT349\Documents\Kajal\[AfterExam ].Net\Extra_Practice\Login_WithRepository\Login_WithRepository.Helpers\obj\Debug\Login_WithRepository.Helpers.dll
+C:\Users\SIT349\Documents\Kajal\[AfterExam ].Net\Extra_Practice\Login_WithRepository\Login_WithRepository.Helpers\obj\Debug\Login_WithRepository.Helpers.pdb

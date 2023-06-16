@@ -1,0 +1,291 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Theam_Login_RegisterModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CouponCodeMaster">
+          <Key>
+            <PropertyRef Name="CouponId" />
+          </Key>
+          <Property Name="CouponId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CouponCode" Type="varchar" MaxLength="255" />
+          <Property Name="CouponType" Type="int" />
+          <Property Name="CoupFlatAmount" Type="int" />
+          <Property Name="CouponPercentage" Type="int" />
+          <Property Name="CouponExpiryDate" Type="datetime" />
+          <Property Name="CouponUsageLimit" Type="int" />
+          <Property Name="CouponIsActive" Type="int" />
+        </EntityType>
+        <EntityType Name="Item">
+          <Key>
+            <PropertyRef Name="ItemId" />
+          </Key>
+          <Property Name="ItemId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ItemName" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="ItemPrice" Type="decimal" Precision="10" Scale="2" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="ItemId" Type="int" />
+          <Property Name="CouponCode" Type="int" />
+          <Property Name="OrderDate" Type="datetime" />
+          <Property Name="OrdertotalQuantity" Type="int" />
+          <Property Name="TotalAmount" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="AfterGST" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="TotalPayable" Type="decimal" Precision="10" Scale="2" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Fullname" Type="varchar" MaxLength="255" />
+          <Property Name="Email" Type="varchar" MaxLength="255" />
+          <Property Name="Password" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <Association Name="FK__Order__CouponCod__4F7CD00D">
+          <End Role="CouponCodeMaster" Type="Self.CouponCodeMaster" Multiplicity="0..1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CouponCodeMaster">
+              <PropertyRef Name="CouponId" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="CouponCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Order__ItemId__4E88ABD4">
+          <End Role="Item" Type="Self.Item" Multiplicity="0..1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Item">
+              <PropertyRef Name="ItemId" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="ItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Order__UserId__4D94879B">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Theam_Login_RegisterModelStoreContainer">
+          <EntitySet Name="CouponCodeMaster" EntityType="Self.CouponCodeMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Item" EntityType="Self.Item" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Order__CouponCod__4F7CD00D" Association="Self.FK__Order__CouponCod__4F7CD00D">
+            <End Role="CouponCodeMaster" EntitySet="CouponCodeMaster" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Order__ItemId__4E88ABD4" Association="Self.FK__Order__ItemId__4E88ABD4">
+            <End Role="Item" EntitySet="Item" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Order__UserId__4D94879B" Association="Self.FK__Order__UserId__4D94879B">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Theam_Login_RegisterModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Fullname" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Order" Relationship="Theam_Login_RegisterModel.FK__Order__UserId__4D94879B" FromRole="Users" ToRole="Order" />
+        </EntityType>
+        <EntityContainer Name="Theam_Login_RegisterEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Users" EntityType="Self.Users" />
+          <EntitySet Name="Item" EntityType="Theam_Login_RegisterModel.Item" />
+          <EntitySet Name="CouponCodeMaster" EntityType="Theam_Login_RegisterModel.CouponCodeMaster" />
+          <EntitySet Name="Order" EntityType="Theam_Login_RegisterModel.Order" />
+          <AssociationSet Name="FK__Order__CouponCod__4F7CD00D" Association="Theam_Login_RegisterModel.FK__Order__CouponCod__4F7CD00D">
+            <End Role="CouponCodeMaster" EntitySet="CouponCodeMaster" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Order__ItemId__4E88ABD4" Association="Theam_Login_RegisterModel.FK__Order__ItemId__4E88ABD4">
+            <End Role="Item" EntitySet="Item" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Order__UserId__4D94879B" Association="Theam_Login_RegisterModel.FK__Order__UserId__4D94879B">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Item">
+          <Key>
+            <PropertyRef Name="ItemId" />
+          </Key>
+          <Property Name="ItemId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="ItemPrice" Type="Decimal" Precision="10" Scale="2" />
+          <NavigationProperty Name="Order" Relationship="Theam_Login_RegisterModel.FK__Order__ItemId__4E88ABD4" FromRole="Item" ToRole="Order" />
+        </EntityType>
+        <EntityType Name="CouponCodeMaster">
+          <Key>
+            <PropertyRef Name="CouponId" />
+          </Key>
+          <Property Name="CouponId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CouponCode" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="CouponType" Type="Int32" />
+          <Property Name="CoupFlatAmount" Type="Int32" />
+          <Property Name="CouponPercentage" Type="Int32" />
+          <Property Name="CouponExpiryDate" Type="DateTime" Precision="3" />
+          <Property Name="CouponUsageLimit" Type="Int32" />
+          <Property Name="CouponIsActive" Type="Int32" />
+          <NavigationProperty Name="Order" Relationship="Theam_Login_RegisterModel.FK__Order__CouponCod__4F7CD00D" FromRole="CouponCodeMaster" ToRole="Order" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="ItemId" Type="Int32" />
+          <Property Name="CouponCode" Type="Int32" />
+          <Property Name="OrderDate" Type="DateTime" Precision="3" />
+          <Property Name="OrdertotalQuantity" Type="Int32" />
+          <Property Name="TotalAmount" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="AfterGST" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="TotalPayable" Type="Decimal" Precision="10" Scale="2" />
+          <NavigationProperty Name="CouponCodeMaster" Relationship="Theam_Login_RegisterModel.FK__Order__CouponCod__4F7CD00D" FromRole="Order" ToRole="CouponCodeMaster" />
+          <NavigationProperty Name="Item" Relationship="Theam_Login_RegisterModel.FK__Order__ItemId__4E88ABD4" FromRole="Order" ToRole="Item" />
+          <NavigationProperty Name="Users" Relationship="Theam_Login_RegisterModel.FK__Order__UserId__4D94879B" FromRole="Order" ToRole="Users" />
+        </EntityType>
+        <Association Name="FK__Order__CouponCod__4F7CD00D">
+          <End Type="Theam_Login_RegisterModel.CouponCodeMaster" Role="CouponCodeMaster" Multiplicity="0..1" />
+          <End Type="Theam_Login_RegisterModel.Order" Role="Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CouponCodeMaster">
+              <PropertyRef Name="CouponId" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="CouponCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Order__ItemId__4E88ABD4">
+          <End Type="Theam_Login_RegisterModel.Item" Role="Item" Multiplicity="0..1" />
+          <End Type="Theam_Login_RegisterModel.Order" Role="Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Item">
+              <PropertyRef Name="ItemId" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="ItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Order__UserId__4D94879B">
+          <End Type="Theam_Login_RegisterModel.Users" Role="Users" Multiplicity="0..1" />
+          <End Type="Theam_Login_RegisterModel.Order" Role="Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Theam_Login_RegisterModelStoreContainer" CdmEntityContainer="Theam_Login_RegisterEntities">
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="Theam_Login_RegisterModel.Users">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Fullname" ColumnName="Fullname" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Item">
+            <EntityTypeMapping TypeName="Theam_Login_RegisterModel.Item">
+              <MappingFragment StoreEntitySet="Item">
+                <ScalarProperty Name="ItemPrice" ColumnName="ItemPrice" />
+                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CouponCodeMaster">
+            <EntityTypeMapping TypeName="Theam_Login_RegisterModel.CouponCodeMaster">
+              <MappingFragment StoreEntitySet="CouponCodeMaster">
+                <ScalarProperty Name="CouponIsActive" ColumnName="CouponIsActive" />
+                <ScalarProperty Name="CouponUsageLimit" ColumnName="CouponUsageLimit" />
+                <ScalarProperty Name="CouponExpiryDate" ColumnName="CouponExpiryDate" />
+                <ScalarProperty Name="CouponPercentage" ColumnName="CouponPercentage" />
+                <ScalarProperty Name="CoupFlatAmount" ColumnName="CoupFlatAmount" />
+                <ScalarProperty Name="CouponType" ColumnName="CouponType" />
+                <ScalarProperty Name="CouponCode" ColumnName="CouponCode" />
+                <ScalarProperty Name="CouponId" ColumnName="CouponId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Order">
+            <EntityTypeMapping TypeName="Theam_Login_RegisterModel.Order">
+              <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="TotalPayable" ColumnName="TotalPayable" />
+                <ScalarProperty Name="AfterGST" ColumnName="AfterGST" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="OrdertotalQuantity" ColumnName="OrdertotalQuantity" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="CouponCode" ColumnName="CouponCode" />
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
